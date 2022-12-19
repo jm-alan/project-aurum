@@ -4,7 +4,7 @@
   "description": "A visual math workpad and equation solver",
   "main": "index.ts",
   "scripts": {
-    "rebuild-wasm": "rm -rf ./pkg; rm -rf ./wasm/pkg; rm -rf ./wasm/target; wasm-pack build wasm",
+    "rebuild-wasm": "rm -rf ./pkg; rm -rf ./wasm/pkg; rm -rf ./wasm/target",
     "start": "npm run rebuild-wasm; webpack serve --mode=development --hot --port 3000",
     "build": "webpack --config webpack.config.ts --mode production"
   },
