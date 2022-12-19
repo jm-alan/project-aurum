@@ -2,11 +2,11 @@
 pub enum StrokeStyle<'style_lifetime> {
   Rgb(u8, u8, u8),
   Rgba(u8, u8, u8, f64),
-  CSSLiteral(String),
+  CSSLiteral(&'style_lifetime str),
   Hex(u32),
 }
 
-impl ToString for StrokeStyle {
+impl<'style_lifetime> ToString for StrokeStyle<'style_lifetime> {
   fn to_string(&self) -> String {
     match &self {
       StrokeStyle::Rgb(red, green, blue) => {
@@ -15,13 +15,13 @@ impl ToString for StrokeStyle {
       StrokeStyle::Rgba(red, green, blue, alpha) => {
         format!("rgba({red}, {green}, {blue}, {alpha})")
       }
-      StrokeStyle::CSSLiteral(literal) => literal.to_owned(),
+      StrokeStyle::CSSLiteral(literal) => (*literal).to_owned(),
       StrokeStyle::Hex(val) => format!("#{:x}", val),
     }
   }
 }
 
-impl Default for StrokeStyle {
+impl<'style_lifetime> Default for StrokeStyle<'style_lifetime> {
   fn default() -> Self {
     Self::Rgb(0, 0, 0)
   }

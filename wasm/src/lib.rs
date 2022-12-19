@@ -76,7 +76,7 @@ pub fn main() {
     .filled()
     .shape_from(&(500.0, 500.0).into())
     .config(StrokeConfig {
-      fill: StrokeStyle::CSSLiteral("blanchedalmond".to_string()),
+      fill: StrokeStyle::CSSLiteral("blanchedalmond"),
       ..Default::default()
     })
     .line_through(&(500.0, 800.0).into())

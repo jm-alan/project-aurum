@@ -8,7 +8,7 @@ use super::{
 };
 
 impl<'builder_life> From<&mut ContiguousShapeBuilder<'builder_life>>
-  for ContiguousShape
+  for ContiguousShape<'builder_life>
 {
   fn from(builder: &mut ContiguousShapeBuilder<'builder_life>) -> Self {
     Self {

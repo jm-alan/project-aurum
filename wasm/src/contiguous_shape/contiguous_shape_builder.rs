@@ -10,11 +10,11 @@ pub struct ContiguousShapeBuilder<'builder_lifetime> {
   pub segments: Vec<ShapeSegment>,
   pub closed_shape: bool,
   pub filled_shape: bool,
-  pub config: BuilderConfig,
+  pub config: BuilderConfig<'builder_lifetime>,
 }
 
 impl<'builder_lifetime> ContiguousShapeBuilder<'builder_lifetime> {
-  pub fn config(mut self, config: StrokeConfig) -> Self {
+  pub fn config(mut self, config: StrokeConfig<'builder_lifetime>) -> Self {
     self.config = BuilderConfig::Override(config);
     self
   }
@@ -53,8 +53,8 @@ impl<'builder_lifetime> ContiguousShapeBuilder<'builder_lifetime> {
 }
 
 #[derive(Debug, Default)]
-pub enum BuilderConfig {
+pub enum BuilderConfig<'config_lifetime> {
   #[default]
   Inherit,
-  Override(StrokeConfig),
+  Override(StrokeConfig<'config_lifetime>),
 }

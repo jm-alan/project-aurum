@@ -14,8 +14,8 @@ use crate::{
 #[derive(Debug)]
 pub struct StrokeBatch<'context_life> {
   render_context: &'context_life CanvasRenderingContext2d,
-  pub stroke_config: StrokeConfig,
-  shapes: Vec<ContiguousShape>,
+  pub stroke_config: StrokeConfig<'context_life>,
+  shapes: Vec<ContiguousShape<'context_life>>,
 }
 
 impl<'context_life> StrokeBatch<'context_life> {

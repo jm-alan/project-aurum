@@ -12,15 +12,15 @@ use crate::{
 };
 
 #[derive(Debug)]
-pub struct ContiguousShape {
+pub struct ContiguousShape<'shape_lifetime> {
   pub start: CanvasPoint,
   pub closed_shape: bool,
   pub filled_shape: bool,
   pub segments: Vec<ShapeSegment>,
-  pub config: StrokeConfig,
+  pub config: StrokeConfig<'shape_lifetime>,
 }
 
-impl ContiguousShape {
+impl<'shape_lifetime> ContiguousShape<'shape_lifetime> {
   pub fn draw(self, context: &CanvasRenderingContext2d) {
     context.begin_path();
     context.set_stroke_style(&JsValue::from(self.config.style.to_string()));
