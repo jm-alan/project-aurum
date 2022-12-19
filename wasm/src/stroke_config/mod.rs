@@ -5,6 +5,7 @@ use crate::enums::{
 #[derive(Debug, Clone, Default)]
 pub struct StrokeConfig {
   pub style: StrokeStyle,
+  pub fill: StrokeStyle,
   pub width: StrokeWidth,
   pub cap: StrokeCap,
 }

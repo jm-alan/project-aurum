@@ -14,11 +14,12 @@ pub struct ContiguousShapeBuilder<'builder_lifetime> {
 }
 
 impl<'builder_lifetime> ContiguousShapeBuilder<'builder_lifetime> {
-  pub fn config(&mut self, config: StrokeConfig) {
+  pub fn config(mut self, config: StrokeConfig) -> Self {
     self.config = BuilderConfig::Override(config);
+    self
   }
 
-  pub fn line_through(&mut self, point: &CanvasPoint) -> &mut Self {
+  pub fn line_through(mut self, point: &CanvasPoint) -> Self {
     self.segments.push(point.into());
     self
   }
@@ -46,7 +47,7 @@ impl<'builder_lifetime> ContiguousShapeBuilder<'builder_lifetime> {
     self.into()
   }
 
-  pub fn fin(mut self) -> StrokeBatch<'builder_lifetime> {
+  pub fn fin(self) -> StrokeBatch<'builder_lifetime> {
     self.into()
   }
 }

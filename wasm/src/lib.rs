@@ -6,6 +6,10 @@ mod shape_segment;
 mod stroke_batch;
 mod stroke_config;
 
+use enums::{
+  stroke_cap::StrokeCap, stroke_style::StrokeStyle, stroke_width::StrokeWidth,
+};
+use stroke_config::StrokeConfig;
 use wasm_bindgen::{prelude::*, JsCast};
 use web_sys::{window, CanvasRenderingContext2d, HtmlCanvasElement};
 
@@ -51,4 +55,33 @@ pub fn main() {
   };
 
   let batch: StrokeBatch = (&context).into();
+  batch
+    .shape_from(&(500.0, 500.0).into())
+    .config(StrokeConfig {
+      fill: StrokeStyle::Rgb(0, 0, 255),
+      ..Default::default()
+    })
+    .line_through(&(400.0, 200.0).into())
+    .line_through(&(600.0, 200.0).into())
+    .line_through(&(500.0, 500.0).into())
+    .filled()
+    .shape_from(&(500.0, 500.0).into())
+    .config(StrokeConfig {
+      fill: StrokeStyle::Hex(0xFF0000),
+      ..Default::default()
+    })
+    .line_through(&(500.0, 800.0).into())
+    .line_through(&(300.0, 800.0).into())
+    .line_through(&(500.0, 500.0).into())
+    .filled()
+    .shape_from(&(500.0, 500.0).into())
+    .config(StrokeConfig {
+      fill: StrokeStyle::CSSLiteral("blanchedalmond".to_string()),
+      ..Default::default()
+    })
+    .line_through(&(500.0, 800.0).into())
+    .line_through(&(700.0, 800.0).into())
+    .line_through(&(500.0, 500.0).into())
+    .filled()
+    .draw()
 }

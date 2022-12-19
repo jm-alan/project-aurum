@@ -22,10 +22,10 @@ pub struct ContiguousShape {
 
 impl ContiguousShape {
   pub fn draw(self, context: &CanvasRenderingContext2d) {
+    context.begin_path();
     context.set_stroke_style(&JsValue::from(self.config.style.to_string()));
     context.set_line_width(self.config.width.into());
     context.set_line_cap(&self.config.cap.to_string());
-    context.begin_path();
     context.move_to(self.start.x, self.start.y);
     for segment in self.segments.into_iter() {
       match segment.stroke_kind {
@@ -47,9 +47,11 @@ impl ContiguousShape {
       }
     }
     if self.filled_shape {
+      context.set_fill_style(&JsValue::from(self.config.fill.to_string()));
       context.fill();
     } else if self.closed_shape {
       context.close_path();
+      context.stroke();
     } else {
       context.stroke();
     };

@@ -2,8 +2,8 @@ use wasm_bindgen::JsValue;
 
 #[derive(Debug, Clone)]
 pub enum StrokeStyle {
-  Rgb(i8, i8, i8),
-  Rgba(i8, i8, i8, i8),
+  Rgb(u8, u8, u8),
+  Rgba(u8, u8, u8, f64),
   CSSLiteral(String),
   Hex(u32),
 }
