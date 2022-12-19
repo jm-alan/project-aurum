@@ -1,4 +1,4 @@
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Default, Clone, Copy)]
 pub enum StrokeCap {
   #[default]
   Butt,

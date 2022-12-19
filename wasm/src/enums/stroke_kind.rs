@@ -1,6 +1,6 @@
 use crate::canvas_point::CanvasPoint;
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Default, Clone, Copy)]
 pub enum StrokeKind {
   #[default]
   Line,

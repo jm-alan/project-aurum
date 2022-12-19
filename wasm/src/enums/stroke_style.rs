@@ -1,7 +1,5 @@
-use wasm_bindgen::JsValue;
-
-#[derive(Debug, Clone)]
-pub enum StrokeStyle {
+#[derive(Debug, Clone, Copy)]
+pub enum StrokeStyle<'style_lifetime> {
   Rgb(u8, u8, u8),
   Rgba(u8, u8, u8, f64),
   CSSLiteral(String),
