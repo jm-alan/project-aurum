@@ -1,21 +1,18 @@
-mod stroke_batch_from_contiguous_shape;
 mod stroke_batch_from_render_context;
 
 use web_sys::CanvasRenderingContext2d;
 
 use crate::{
   canvas_point::CanvasPoint,
-  contiguous_shape::{
-    contiguous_shape_builder::ContiguousShapeBuilder, ContiguousShape,
-  },
-  stroke_config::StrokeConfig,
+  contiguous_shape::{builder::ContiguousShapeBuilder, ContiguousShape},
+  shape_config::ShapeConfig,
 };
 
 #[derive(Debug)]
 pub struct StrokeBatch<'context_life> {
   render_context: &'context_life CanvasRenderingContext2d,
-  pub stroke_config: StrokeConfig<'context_life>,
-  shapes: Vec<ContiguousShape<'context_life>>,
+  pub config: ShapeConfig,
+  pub shapes: Vec<ContiguousShape>,
 }
 
 impl<'context_life> StrokeBatch<'context_life> {
@@ -24,21 +21,33 @@ impl<'context_life> StrokeBatch<'context_life> {
   ) -> Self {
     Self {
       render_context,
-      stroke_config: Default::default(),
+      config: Default::default(),
       shapes: vec![],
     }
   }
 
-  pub fn shape_from(
-    self,
-    start: &CanvasPoint,
-  ) -> ContiguousShapeBuilder<'context_life> {
-    (self, start).into()
+  pub fn config(&mut self, config: ShapeConfig) -> &mut Self {
+    self.config = config;
+    self
   }
 
-  pub fn draw(self) {
-    for shape in self.shapes.into_iter() {
-      shape.draw(self.render_context)
+  pub fn shape_from(
+    &mut self,
+    start: CanvasPoint,
+  ) -> ContiguousShapeBuilder<'context_life, '_> {
+    ContiguousShapeBuilder {
+      batch: self,
+      start,
+      segments: vec![],
+      closed_shape: false,
+      filled_shape: false,
+      config: Default::default(),
     }
+  }
+}
+
+impl StrokeBatch<'_> {
+  pub fn draw(&mut self) {
+    self.shapes.drain(..).for_each(|shape| shape.draw(self.render_context));
   }
 }

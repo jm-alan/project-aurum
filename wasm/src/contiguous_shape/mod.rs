@@ -1,33 +1,30 @@
-pub mod contiguous_shape_builder;
-mod contiguous_shape_builder_from_stroke_batch;
+pub mod builder;
 mod contiguous_shape_from_contiguous_shape_builder;
 
-use wasm_bindgen::JsValue;
 use web_sys::CanvasRenderingContext2d;
 
 use crate::{
   canvas_point::CanvasPoint, enums::stroke_kind::StrokeKind,
-  logging::console_log, shape_segment::ShapeSegment,
-  stroke_config::StrokeConfig,
+  logging::console_log, shape_config::ShapeConfig, shape_segment::ShapeSegment,
 };
 
 #[derive(Debug)]
-pub struct ContiguousShape<'shape_lifetime> {
+pub struct ContiguousShape {
   pub start: CanvasPoint,
   pub closed_shape: bool,
   pub filled_shape: bool,
   pub segments: Vec<ShapeSegment>,
-  pub config: StrokeConfig<'shape_lifetime>,
+  pub config: ShapeConfig,
 }
 
-impl<'shape_lifetime> ContiguousShape<'shape_lifetime> {
+impl ContiguousShape {
   pub fn draw(self, context: &CanvasRenderingContext2d) {
     context.begin_path();
-    context.set_stroke_style(&JsValue::from(self.config.style.to_string()));
+    context.set_stroke_style(&self.config.style.to_string().into());
     context.set_line_width(self.config.width.into());
     context.set_line_cap(&self.config.cap.to_string());
     context.move_to(self.start.x, self.start.y);
-    for segment in self.segments.into_iter() {
+    for segment in self.segments.iter() {
       match segment.stroke_kind {
         StrokeKind::Line => {
           context.line_to(segment.coordinates.x, segment.coordinates.y);
@@ -47,7 +44,7 @@ impl<'shape_lifetime> ContiguousShape<'shape_lifetime> {
       }
     }
     if self.filled_shape {
-      context.set_fill_style(&JsValue::from(self.config.fill.to_string()));
+      context.set_fill_style(&self.config.fill.to_string().into());
       context.fill();
     } else if self.closed_shape {
       context.close_path();

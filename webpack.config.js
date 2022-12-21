@@ -35,5 +35,9 @@ module.exports = {
   mode: 'development',
   experiments: {
     asyncWebAssembly: true
+  },
+  watchOptions: {
+    aggregateTimeout: 200,
+    poll: 200
   }
 };

@@ -1,31 +1,33 @@
-use std::mem;
-
-use crate::logging::console_log;
-
 use super::{
-  contiguous_shape_builder::{BuilderConfig, ContiguousShapeBuilder},
+  builder::{BuilderConfig, ContiguousShapeBuilder},
   ContiguousShape,
 };
+use crate::stroke_batch::StrokeBatch;
 
-impl<'builder_life> From<&mut ContiguousShapeBuilder<'builder_life>>
-  for ContiguousShape<'builder_life>
+impl<'batch_life: 'builder_life, 'builder_life>
+  From<ContiguousShapeBuilder<'batch_life, 'builder_life>>
+  for &'builder_life mut StrokeBatch<'batch_life>
 {
-  fn from(builder: &mut ContiguousShapeBuilder<'builder_life>) -> Self {
-    Self {
-      start: mem::take(&mut builder.start),
-      closed_shape: builder.closed_shape,
-      filled_shape: builder.filled_shape,
-      segments: mem::take(&mut builder.segments),
-      config: match mem::take(&mut builder.config) {
-        BuilderConfig::Inherit => {
-          console_log!("Inheriting builder config");
-          builder.batch.stroke_config.to_owned()
-        }
-        BuilderConfig::Override(config) => {
-          console_log!("Overriding builder config");
-          config
-        }
+  fn from(builder: ContiguousShapeBuilder<'batch_life, 'builder_life>) -> Self {
+    let ContiguousShapeBuilder {
+      batch,
+      start,
+      closed_shape,
+      filled_shape,
+      segments,
+      config,
+    } = builder;
+    let shape = ContiguousShape {
+      start,
+      closed_shape,
+      filled_shape,
+      segments,
+      config: match config {
+        BuilderConfig::Inherit => batch.config.clone(),
+        BuilderConfig::Override(config) => config,
       },
-    }
+    };
+    batch.shapes.push(shape);
+    batch
   }
 }
