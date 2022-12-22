@@ -1,5 +1,10 @@
+#[macro_export]
 macro_rules! console_log {
-  ($($t:tt)*) => (crate::log(&format_args!($($t)*).to_string()));
+  ($($loggable_expression:expr ),+) => {
+    let mut formatted_expression: String = "".to_string();
+    $(
+      formatted_expression += &format!("{:#?} ", $loggable_expression);
+    )*
+    $crate::log(&formatted_expression);
+  };
 }
-
-pub(crate) use console_log;

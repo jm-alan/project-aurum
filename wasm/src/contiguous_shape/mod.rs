@@ -5,7 +5,7 @@ use web_sys::CanvasRenderingContext2d;
 
 use crate::{
   canvas_point::CanvasPoint, enums::stroke_kind::StrokeKind,
-  logging::console_log, shape_config::ShapeConfig, shape_segment::ShapeSegment,
+  shape_config::ShapeConfig, shape_segment::ShapeSegment,
 };
 
 #[derive(Debug)]
