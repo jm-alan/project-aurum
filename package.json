@@ -1,7 +1,7 @@
 {
-  "name": "wolfram-wishes",
+  "name": "that-game-from-those-ads",
   "version": "1.0.0",
-  "description": "A visual math workpad and equation solver",
+  "description": "That game! You know, the one from those ads?",
   "main": "index.ts",
   "scripts": {
     "rebuild-wasm": "rm -rf ./pkg; rm -rf ./wasm/pkg; rm -rf ./wasm/target",
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jm-alan/wolfram-wishes.git"
+    "url": "git+https://github.com/jm-alan/that-game-from-those-ads.git"
   },
   "author": "JMA",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/jm-alan/wolfram-wishes/issues"
+    "url": "https://github.com/jm-alan/that-game-from-those-ads/issues"
   },
-  "homepage": "https://github.com/jm-alan/wolfram-wishes#readme",
+  "homepage": "https://github.com/jm-alan/that-game-from-those-ads#readme",
   "devDependencies": {
     "@types/node": "^18.11.17",
     "@wasm-tool/wasm-pack-plugin": "^1.6.0",
