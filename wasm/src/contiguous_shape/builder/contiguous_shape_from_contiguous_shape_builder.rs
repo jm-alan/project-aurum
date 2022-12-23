@@ -17,17 +17,21 @@ impl<'batch_life: 'builder_life, 'builder_life>
       segments,
       config,
     } = builder;
+    let Option::Some(extant_batch) = batch else {
+      console_log!("ContiguousShapeBuilder instantiated without accompanying StrokeBatch; panicking");
+      panic!();
+    };
     let shape = ContiguousShape {
       start,
       closed_shape,
       filled_shape,
       segments,
       config: match config {
-        BuilderConfig::Inherit => batch.config.clone(),
+        BuilderConfig::Inherit => extant_batch.config.clone(),
         BuilderConfig::Override(config) => config,
       },
     };
-    batch.shapes.push(shape);
-    batch
+    extant_batch.shapes.push(shape);
+    extant_batch
   }
 }

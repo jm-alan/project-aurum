@@ -6,8 +6,9 @@ use crate::{
   shape_segment::ShapeSegment, stroke_batch::StrokeBatch,
 };
 
+#[derive(Debug, Default)]
 pub struct ContiguousShapeBuilder<'batch_life: 'builder_life, 'builder_life> {
-  pub batch: &'builder_life mut StrokeBatch<'batch_life>,
+  pub batch: Option<&'builder_life mut StrokeBatch<'batch_life>>,
   pub start: CanvasPoint,
   pub segments: Vec<ShapeSegment>,
   pub closed_shape: bool,
