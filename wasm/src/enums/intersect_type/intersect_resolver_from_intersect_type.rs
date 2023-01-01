@@ -29,11 +29,28 @@ impl From<IntersectType> for IntersectResolver {
         ((point.x - center.x).powf(2.0) + (point.y - center.y).powf(2.0))
           <= radius.powf(2.0)
       }),
-      IntersectType::Ellipse(center, radius_x, radius_y) => {
+      IntersectType::Ellipse(center, rotation, radius_x, radius_y) => {
+        // https://www.maa.org/external_archive/joma/Volume8/Kalman/General.html
         Box::new(move |point| {
-          (((radius_y.powf(2.0)) * (point.x - center.x).powf(2.0))
-            + (radius_x.powf(2.0) * (point.y - center.y).powf(2.0)))
-            <= (radius_x.powf(2.0) * radius_y.powf(2.0))
+          let sin_rotation = rotation.sin();
+          let cos_rotation = rotation.cos();
+          let sin_sq_rotation = sin_rotation.powf(2.0);
+          let cos_sq_rotation = 1.0 - sin_sq_rotation;
+          let radius_x_sq = radius_x.powf(2.0);
+          let radius_y_sq = radius_y.powf(2.0);
+
+          (((cos_sq_rotation / radius_x_sq) + (sin_sq_rotation / radius_y_sq))
+            * (point.x - center.x).powf(2.0))
+            + (((sin_sq_rotation / radius_x_sq)
+              + (cos_sq_rotation / radius_y_sq))
+              * (point.y - center.y).powf(2.0))
+            + (2.0
+              * sin_rotation
+              * cos_rotation
+              * ((1.0 / radius_x_sq) - (1.0 / radius_y_sq))
+              * (point.x - center.x)
+              * (point.y - center.y))
+            < 1.0
         })
       }
       IntersectType::Polygon(vertices) => {
