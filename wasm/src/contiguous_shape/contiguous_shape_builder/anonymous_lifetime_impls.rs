@@ -26,9 +26,7 @@ impl ContiguousShapeBuilder<'_, '_> {
     control: CanvasPoint,
     radius: f64,
   ) -> Self {
-    self
-      .segments
-      .push((point, &StrokeKind::Arc(radius, control.to_owned())).into());
+    self.segments.push((point, &StrokeKind::Arc(control, radius)).into());
     self
   }
 
