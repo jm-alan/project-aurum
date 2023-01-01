@@ -1,5 +1,5 @@
 mod anonymous_lifetime_impls;
-mod contiguous_shape_from_contiguous_shape_builder;
+mod contiguous_shape_builder_from_stroke_batch;
 mod named_lifetime_impls;
 
 use crate::{
@@ -15,12 +15,5 @@ pub struct ContiguousShapeBuilder<'batch_life: 'builder_life, 'builder_life> {
   pub closed_shape: bool,
   pub filled_shape: bool,
   pub intersect_type: IntersectType,
-  pub config: BuilderConfig,
-}
-
-#[derive(Debug, Default, Clone)]
-pub enum BuilderConfig {
-  #[default]
-  Inherit,
-  Override(ShapeConfig),
+  pub config: ShapeConfig,
 }

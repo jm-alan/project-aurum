@@ -1,6 +1,6 @@
 use crate::{contiguous_shape::ContiguousShape, stroke_batch::StrokeBatch};
 
-use super::builder::{BuilderConfig, ContiguousShapeBuilder};
+use super::builder::ContiguousShapeBuilder;
 
 impl<'batch_life: 'builder_life, 'builder_life>
   From<ContiguousShapeBuilder<'batch_life, 'builder_life>>
@@ -22,10 +22,7 @@ impl<'batch_life: 'builder_life, 'builder_life>
       filled_shape,
       segments,
       intersect_type,
-      config: match config {
-        BuilderConfig::Inherit => batch.config.clone(),
-        BuilderConfig::Override(config) => config,
-      },
+      config,
     };
     batch.shapes.push(shape);
     batch

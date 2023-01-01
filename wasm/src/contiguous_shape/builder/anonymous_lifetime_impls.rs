@@ -6,7 +6,7 @@ use crate::{
 
 impl ContiguousShapeBuilder<'_, '_> {
   pub fn config(mut self, config: ShapeConfig) -> Self {
-    self.config = BuilderConfig::Override(config);
+    self.config = config;
     self
   }
 
