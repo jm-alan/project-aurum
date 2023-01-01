@@ -11,6 +11,7 @@ use crate::{
   shape_segment::ShapeSegment,
 };
 
+#[derive(Default)]
 pub struct ContiguousShape {
   pub start: CanvasPoint,
   pub closed_shape: bool,
@@ -32,6 +33,17 @@ impl ContiguousShape {
         StrokeKind::Line => {
           context.line_to(segment.coordinates.x, segment.coordinates.y);
         }
+        StrokeKind::CircularArc(radius, start_angle, end_angle) => {
+          let Ok(_) = context.arc(
+            segment.coordinates.x,
+            segment.coordinates.y,
+            radius,
+            start_angle,
+            end_angle
+          ) else {
+            js_panic!("Invalid parameters passed to arc function");
+          };
+        }
         StrokeKind::ControlledArc(control, radius) => {
           let Ok(_) = context.arc_to(
             control.x,
@@ -40,7 +52,7 @@ impl ContiguousShape {
             segment.coordinates.y,
             radius,
           ) else {
-            js_panic!("Invalid parameters passed to arc function");
+            js_panic!("Invalid parameters passed to arc_to function");
           };
         }
         StrokeKind::BezierCurve(control_one, control_two) => {
@@ -53,6 +65,25 @@ impl ContiguousShape {
             segment.coordinates.y,
           );
         }
+        StrokeKind::Ellipse(
+          radius_x,
+          radius_y,
+          rotation,
+          start_angle,
+          end_angle,
+        ) => {
+          let Ok(_) = context.ellipse(
+            segment.coordinates.x,
+            segment.coordinates.y,
+            radius_x,
+            radius_y,
+            rotation,
+            start_angle,
+            end_angle,
+          ) else {
+            js_panic!("Invalid parameters passed to ellipse function");
+          };
+        }
       }
     }
     if self.filled_shape {
@@ -60,9 +91,6 @@ impl ContiguousShape {
       context.fill();
     } else if self.closed_shape {
       context.close_path();
-      context.stroke();
-    } else {
-      context.stroke();
-    };
+    }
   }
 }
