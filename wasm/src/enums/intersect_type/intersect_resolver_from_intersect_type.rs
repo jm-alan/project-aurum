@@ -12,7 +12,7 @@ impl From<IntersectType> for IntersectResolver {
       IntersectType::Triangle(corner_one, corner_two, corner_three) => {
         resolve_convex_polygon!(corner_one, corner_two, corner_three)
       }
-      IntersectType::Rectangle(
+      IntersectType::Rhombus(
         corner_one,
         corner_two,
         corner_three,

@@ -9,9 +9,9 @@ pub enum IntersectType {
   #[default]
   None,
   Triangle(CanvasPoint, CanvasPoint, CanvasPoint),
-  Rectangle(CanvasPoint, CanvasPoint, CanvasPoint, CanvasPoint),
+  Rhombus(CanvasPoint, CanvasPoint, CanvasPoint, CanvasPoint),
   Circle(CanvasPoint, f64),
-  Ellipse(CanvasPoint, f64, f64),
+  Ellipse(CanvasPoint, f64, f64, f64),
   Polygon(Vec<CanvasPoint>),
   Custom(IntersectResolver),
 }
