@@ -1,5 +1,6 @@
-use super::{BuilderConfig, ContiguousShapeBuilder};
 use crate::{contiguous_shape::ContiguousShape, stroke_batch::StrokeBatch};
+
+use super::builder::{BuilderConfig, ContiguousShapeBuilder};
 
 impl<'batch_life: 'builder_life, 'builder_life>
   From<ContiguousShapeBuilder<'batch_life, 'builder_life>>
