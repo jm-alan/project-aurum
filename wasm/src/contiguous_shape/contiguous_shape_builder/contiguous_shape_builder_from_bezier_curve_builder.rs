@@ -9,16 +9,13 @@ impl<'batch_life: 'builder_life, 'builder_life>
   fn from(builder: BezierCurveBuilder<'batch_life, 'builder_life>) -> Self {
     let BezierCurveBuilder {
       mut parent_builder,
-      control_point_one,
-      control_point_two,
+      control_one,
+      control_two,
       final_point,
     } = builder;
     parent_builder.segments.push(ShapeSegment {
       coordinates: final_point,
-      stroke_kind: StrokeKind::BezierCurve(
-        control_point_one,
-        control_point_two,
-      ),
+      stroke_kind: StrokeKind::BezierCurve(control_one, control_two),
     });
     parent_builder
   }

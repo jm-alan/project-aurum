@@ -32,7 +32,7 @@ impl ContiguousShape {
         StrokeKind::Line => {
           context.line_to(segment.coordinates.x, segment.coordinates.y);
         }
-        StrokeKind::Arc(control, radius) => {
+        StrokeKind::ControlledArc(control, radius) => {
           let Ok(_) = context.arc_to(
             control.x,
             control.y,

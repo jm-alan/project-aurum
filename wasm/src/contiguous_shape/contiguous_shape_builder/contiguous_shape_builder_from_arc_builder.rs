@@ -15,7 +15,7 @@ impl<'batch_life: 'builder_life, 'builder_life>
     } = builder;
     parent_builder.segments.push(ShapeSegment {
       coordinates: final_point,
-      stroke_kind: StrokeKind::Arc(control_point, radius),
+      stroke_kind: StrokeKind::ControlledArc(control_point, radius),
     });
     parent_builder
   }

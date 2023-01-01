@@ -1,3 +1,4 @@
+mod arc_builder_from_contiguous_shape_builder;
 mod arc_builder_stages_impl;
 
 use super::ContiguousShapeBuilder;
@@ -11,8 +12,8 @@ pub struct ArcBuilder<'batch_life: 'builder_life, 'builder_life> {
 }
 
 pub struct ArcBuilderStageOne<'batch_life: 'builder_life, 'builder_life> {
-  parent_builder: ArcBuilder<'batch_life, 'builder_life>,
-  control_point: CanvasPoint,
+  pub parent_builder: ArcBuilder<'batch_life, 'builder_life>,
+  pub control_point: CanvasPoint,
 }
 
 pub struct ArcBuilderStageTwo<'batch_life: 'builder_life, 'builder_life> {

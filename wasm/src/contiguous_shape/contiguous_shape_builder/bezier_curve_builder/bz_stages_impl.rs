@@ -50,7 +50,7 @@ impl<'batch_life: 'builder_life, 'builder_life>
       mut parent_builder,
       control_point,
     } = stage_one;
-    parent_builder.control_point_one = control_point;
+    parent_builder.control_one = control_point;
     Self {
       parent_builder,
       control_point: Default::default(),
@@ -62,12 +62,12 @@ impl<'batch_life: 'builder_life, 'builder_life>
   From<BZBuilderStageTwo<'batch_life, 'builder_life>>
   for BezierCurveBuilder<'batch_life, 'builder_life>
 {
-  fn from(stage_three: BZBuilderStageTwo<'batch_life, 'builder_life>) -> Self {
+  fn from(stage_two: BZBuilderStageTwo<'batch_life, 'builder_life>) -> Self {
     let BZBuilderStageTwo {
       mut parent_builder,
       control_point,
-    } = stage_three;
-    parent_builder.final_point = control_point;
+    } = stage_two;
+    parent_builder.control_two = control_point;
     parent_builder
   }
 }
