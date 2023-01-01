@@ -1,4 +1,4 @@
-use crate::contiguous_shape::builder::ContiguousShapeBuilder;
+use crate::contiguous_shape::contiguous_shape_builder::ContiguousShapeBuilder;
 
 use super::StrokeBatch;
 

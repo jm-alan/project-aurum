@@ -1,4 +1,4 @@
-use super::{BuilderConfig, ContiguousShapeBuilder};
+use super::ContiguousShapeBuilder;
 use crate::{
   canvas_point::CanvasPoint, enums::stroke_kind::StrokeKind,
   shape_config::ShapeConfig,
@@ -33,7 +33,7 @@ impl ContiguousShapeBuilder<'_, '_> {
   }
 
   pub fn angle_through(mut self, angle_in_radians: f64, distance: f64) -> Self {
-    let last_point: CanvasPoint = if !self.segments.is_empty() {
+    let last_point = if !self.segments.is_empty() {
       self.segments[self.segments.len() - 1].coordinates
     } else {
       self.start
@@ -50,7 +50,7 @@ impl ContiguousShapeBuilder<'_, '_> {
   }
 
   pub fn offset_through(mut self, offset_x: f64, offset_y: f64) -> Self {
-    let last_point: CanvasPoint = if !self.segments.is_empty() {
+    let last_point = if !self.segments.is_empty() {
       self.segments[self.segments.len() - 1].coordinates
     } else {
       self.start
