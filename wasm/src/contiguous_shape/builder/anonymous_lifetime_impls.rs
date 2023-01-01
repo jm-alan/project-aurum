@@ -5,6 +5,11 @@ use crate::{
 };
 
 impl ContiguousShapeBuilder<'_, '_> {
+  pub fn beginning_at(mut self, point: CanvasPoint) -> Self {
+    self.start = point;
+    self
+  }
+
   pub fn config(mut self, config: ShapeConfig) -> Self {
     self.config = config;
     self
