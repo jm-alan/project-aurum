@@ -1,4 +1,8 @@
 mod anonymous_lifetime_impls;
+mod arc_builder;
+mod bezier_curve_builder;
+mod contiguous_shape_builder_from_arc_builder;
+mod contiguous_shape_builder_from_bezier_curve_builder;
 mod contiguous_shape_builder_from_stroke_batch;
 mod named_lifetime_impls;
 
