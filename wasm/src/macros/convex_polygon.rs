@@ -4,7 +4,7 @@ macro_rules! resolve_convex_polygon {
     {
       let vertices = [$first, $sec, $($el),*, $first];
       let ceil = vertices.len() - 1;
-      Box::new(move |point: CanvasPoint| {
+      Box::new(move |point| {
         for idx in 0..ceil {
           if (
               ((vertices[idx + 1].x - vertices[idx].x)
