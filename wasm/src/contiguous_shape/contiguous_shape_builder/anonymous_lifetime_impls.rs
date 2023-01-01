@@ -1,8 +1,5 @@
 use super::ContiguousShapeBuilder;
-use crate::{
-  canvas_point::CanvasPoint, enums::stroke_kind::StrokeKind,
-  shape_config::ShapeConfig,
-};
+use crate::{canvas_point::CanvasPoint, shape_config::ShapeConfig};
 
 impl ContiguousShapeBuilder<'_, '_> {
   pub fn beginning_at(mut self, point: CanvasPoint) -> Self {
@@ -17,16 +14,6 @@ impl ContiguousShapeBuilder<'_, '_> {
 
   pub fn line_through(mut self, point: CanvasPoint) -> Self {
     self.segments.push(point.into());
-    self
-  }
-
-  pub fn arc_through(
-    mut self,
-    point: CanvasPoint,
-    control: CanvasPoint,
-    radius: f64,
-  ) -> Self {
-    self.segments.push((point, &StrokeKind::Arc(control, radius)).into());
     self
   }
 
