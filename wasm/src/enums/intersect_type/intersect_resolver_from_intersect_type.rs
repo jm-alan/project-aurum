@@ -8,6 +8,7 @@ use super::IntersectType;
 impl From<IntersectType> for IntersectResolver {
   fn from(intersect: IntersectType) -> Self {
     match intersect {
+      IntersectType::None => Box::new(|_| false),
       IntersectType::Triangle(corner_one, corner_two, corner_three) => {
         resolve_convex_polygon!(corner_one, corner_two, corner_three)
       }
