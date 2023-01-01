@@ -1,20 +1,23 @@
-pub mod builder;
+pub mod contiguous_shape_builder;
 mod contiguous_shape_from_contiguous_shape_builder;
 
 use web_sys::CanvasRenderingContext2d;
 
 use crate::{
-  canvas_point::CanvasPoint, enums::stroke_kind::StrokeKind,
-  shape_config::ShapeConfig, shape_segment::ShapeSegment,
+  canvas_point::CanvasPoint,
+  enums::{intersect_type::IntersectType, stroke_kind::StrokeKind},
+  js_panic,
+  shape_config::ShapeConfig,
+  shape_segment::ShapeSegment,
 };
 
-#[derive(Debug)]
 pub struct ContiguousShape {
   pub start: CanvasPoint,
   pub closed_shape: bool,
   pub filled_shape: bool,
   pub segments: Vec<ShapeSegment>,
   pub config: ShapeConfig,
+  pub intersect_type: IntersectType,
 }
 
 impl ContiguousShape {
@@ -37,9 +40,18 @@ impl ContiguousShape {
             segment.coordinates.y,
             radius,
           ) else {
-            console_log!("Invalid parameters provided to context.arc_to aka context.arcTo; panicking");
-            panic!();
+            js_panic!("Invalid parameters passed to arc function");
           };
+        }
+        StrokeKind::BezierCurve(control_one, control_two) => {
+          context.bezier_curve_to(
+            control_one.x,
+            control_one.y,
+            control_two.x,
+            control_two.y,
+            segment.coordinates.x,
+            segment.coordinates.y,
+          );
         }
       }
     }
