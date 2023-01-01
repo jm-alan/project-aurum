@@ -4,11 +4,14 @@ use web_sys::CanvasRenderingContext2d;
 
 use crate::{
   canvas_point::CanvasPoint,
-  contiguous_shape::{builder::ContiguousShapeBuilder, ContiguousShape},
+  contiguous_shape::{
+    contiguous_shape_builder::ContiguousShapeBuilder, ContiguousShape,
+  },
+  enums::stroke_kind::StrokeKind,
   shape_config::ShapeConfig,
+  shape_segment::ShapeSegment,
 };
 
-#[derive(Debug)]
 pub struct StrokeBatch<'context_life> {
   render_context: &'context_life CanvasRenderingContext2d,
   pub config: ShapeConfig,
@@ -31,23 +34,36 @@ impl<'context_life> StrokeBatch<'context_life> {
     self
   }
 
-  pub fn shape_from(
+  pub fn arc(
     &mut self,
-    start: CanvasPoint,
-  ) -> ContiguousShapeBuilder<'context_life, '_> {
-    ContiguousShapeBuilder {
-      batch: self,
-      start,
-      segments: vec![],
-      closed_shape: false,
-      filled_shape: false,
-      config: Default::default(),
-    }
+    center: CanvasPoint,
+    radius: f64,
+    start_angle: f64,
+    end_angle: f64,
+  ) -> &mut Self {
+    self.shapes.push(ContiguousShape {
+      segments: vec![ShapeSegment {
+        coordinates: center,
+        stroke_kind: StrokeKind::CircularArc(radius, start_angle, end_angle),
+      }],
+      ..Default::default()
+    });
+    self
+  }
+
+  pub fn singleton(&mut self, kind: StrokeKind) -> &mut Self {
+    self.shapes.push(kind.into());
+    self
+  }
+
+  pub fn custom_shape(&mut self) -> ContiguousShapeBuilder<'context_life, '_> {
+    self.into()
   }
 }
 
 impl StrokeBatch<'_> {
   pub fn draw(&mut self) {
     self.shapes.drain(..).for_each(|shape| shape.draw(self.render_context));
+    self.render_context.stroke();
   }
 }

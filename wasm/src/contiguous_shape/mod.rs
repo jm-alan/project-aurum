@@ -1,5 +1,6 @@
 pub mod contiguous_shape_builder;
 mod contiguous_shape_from_contiguous_shape_builder;
+mod contiguous_shape_from_stroke_kind;
 
 use web_sys::CanvasRenderingContext2d;
 
