@@ -33,6 +33,17 @@ impl ContiguousShape {
         StrokeKind::Line => {
           context.line_to(segment.coordinates.x, segment.coordinates.y);
         }
+        StrokeKind::Square(corner_one, corner_two) => {
+          let x_diff = corner_two.x - corner_one.x;
+          let y_diff = corner_two.y - corner_one.y;
+          let center_x = (corner_one.x + corner_two.x) / 2.0;
+          let center_y = (corner_one.y + corner_two.y) / 2.0;
+          context.move_to(corner_one.x, corner_one.y);
+          context.line_to(center_x + y_diff, center_y + x_diff);
+          context.line_to(corner_two.x, corner_two.y);
+          context.line_to(center_x - y_diff, center_y - x_diff);
+          context.close_path();
+        }
         StrokeKind::CircularArc(radius, start_angle, end_angle) => {
           let Ok(_) = context.arc(
             segment.coordinates.x,
