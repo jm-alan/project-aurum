@@ -4,6 +4,6 @@ use crate::canvas_point::CanvasPoint;
 pub enum StrokeKind {
   #[default]
   Line,
-  Arc(CanvasPoint, f64),
+  ControlledArc(CanvasPoint, f64),
   BezierCurve(CanvasPoint, CanvasPoint),
 }
