@@ -22,13 +22,13 @@ extern "C" {
 }
 
 #[wasm_bindgen]
-pub fn draw(
-  segments: u8,
-  center_x: f64,
-  center_y: f64,
-  radius: f64,
-  additional_offset: f64,
-) {
+extern "C" {
+  #[wasm_bindgen(js_namespace = console, js_name = error)]
+  fn err(s: &str);
+}
+
+#[wasm_bindgen(start)]
+pub fn main() {
   let Some(window_ref) = window() else {
     js_panic!("Failed to grab window object from DOM");
   };
