@@ -35,20 +35,37 @@ impl ContiguousShape {
           context.line_to(segment.coordinates.x, segment.coordinates.y);
         }
         StrokeKind::Square(corner_one, corner_two) => {
-          let x_diff = corner_two.x - corner_one.x;
-          let y_diff = corner_two.y - corner_one.y;
+          let x_diff = (corner_two.x - corner_one.x) / 2.0;
+          let y_diff = (corner_two.y - corner_one.y) / 2.0;
           let center_x = (corner_one.x + corner_two.x) / 2.0;
           let center_y = (corner_one.y + corner_two.y) / 2.0;
           context.move_to(corner_one.x, corner_one.y);
-          context.line_to(center_x + y_diff, center_y + x_diff);
+          context.line_to(center_x - y_diff, center_y + x_diff);
           context.line_to(corner_two.x, corner_two.y);
-          context.line_to(center_x - y_diff, center_y - x_diff);
+          context.line_to(center_x + y_diff, center_y - x_diff);
           context.close_path();
         }
-        StrokeKind::CircularArc(radius, start_angle, end_angle) => {
+        StrokeKind::SquareVector(corner_one, angle, radius) => {
+          let corner_two: CanvasPoint = (
+            corner_one.x + (angle.cos() * radius),
+            corner_one.y + (angle.sin() * radius),
+          )
+            .into();
+          let x_diff = (corner_two.x - corner_one.x) / 2.0;
+          let y_diff = (corner_two.y - corner_one.y) / 2.0;
+          let center_x = (corner_one.x + corner_two.x) / 2.0;
+          let center_y = (corner_one.y + corner_two.y) / 2.0;
+          context.move_to(corner_one.x, corner_one.y);
+          context.line_to(center_x - y_diff, center_y + x_diff);
+          context.line_to(corner_two.x, corner_two.y);
+          context.line_to(center_x + y_diff, center_y - x_diff);
+          context.close_path();
+        }
+        StrokeKind::CircularArc(center, radius, start_angle, end_angle) => {
+          context.begin_path();
           let Ok(_) = context.arc(
-            segment.coordinates.x,
-            segment.coordinates.y,
+            center.x,
+            center.y,
             radius,
             start_angle,
             end_angle
@@ -78,15 +95,17 @@ impl ContiguousShape {
           );
         }
         StrokeKind::Ellipse(
+          center,
           radius_x,
           radius_y,
           rotation,
           start_angle,
           end_angle,
         ) => {
+          context.begin_path();
           let Ok(_) = context.ellipse(
-            segment.coordinates.x,
-            segment.coordinates.y,
+            center.x,
+            center.y,
             radius_x,
             radius_y,
             rotation,
@@ -103,6 +122,8 @@ impl ContiguousShape {
       context.fill();
     } else if self.closed_shape {
       context.close_path();
+    } else {
+      context.stroke();
     }
   }
 }
