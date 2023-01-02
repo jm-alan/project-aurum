@@ -64,6 +64,5 @@ impl<'context_life> StrokeBatch<'context_life> {
 impl StrokeBatch<'_> {
   pub fn draw(&mut self) {
     self.shapes.drain(..).for_each(|shape| shape.draw(self.render_context));
-    self.render_context.stroke();
   }
 }
