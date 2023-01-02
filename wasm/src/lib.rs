@@ -30,33 +30,27 @@ pub fn draw(
   additional_offset: f64,
 ) {
   let Some(window_ref) = window() else {
-    console_log!("Failed to grab window object from DOM; panicking");
-    panic!();
+    js_panic!("Failed to grab window object from DOM");
   };
 
   let Some(document) = window_ref.document() else {
-    console_log!("Failed to grab document from window; panicking");
-    panic!();
+    js_panic!("Failed to grab document from window");
   };
 
   let Some(element) = document.get_element_by_id("main") else {
-    console_log!("Failed to grab canvas by ID; panicking");
-    panic!();
+    js_panic!("Failed to grab canvas by ID");
   };
 
   let Ok(canvas) = element.dyn_into::<HtmlCanvasElement>() else {
-    console_log!("Failed to cast grabbed element as canvas; panicking");
-    panic!();
+    js_panic!("Failed to cast #main as canvas");
   };
 
   let Ok(Some(object)) = canvas.get_context("2d") else {
-    console_log!("Failed to get canvas rendering context; panicking");
-    panic!();
+    js_panic!("Failed to get object representing render context");
   };
 
   let Ok(context) = object.dyn_into::<CanvasRenderingContext2d>() else {
-    console_log!("Failed to cast object as render context; panicking");
-    panic!();
+    js_panic!("Failed to cast object as render context");
   };
 
   let mut batch = StrokeBatch::from(&context);
