@@ -4,8 +4,10 @@ use crate::canvas_point::CanvasPoint;
 pub enum StrokeKind {
   #[default]
   Line,
-  CircularArc(f64, f64, f64),
+  Square(CanvasPoint, CanvasPoint),
+  SquareVector(CanvasPoint, f64, f64),
+  CircularArc(CanvasPoint, f64, f64, f64),
   ControlledArc(CanvasPoint, f64),
   BezierCurve(CanvasPoint, CanvasPoint),
-  Ellipse(f64, f64, f64, f64, f64),
+  Ellipse(CanvasPoint, f64, f64, f64, f64, f64),
 }
