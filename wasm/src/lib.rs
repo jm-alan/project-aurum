@@ -1,18 +1,17 @@
 mod canvas_point;
 mod contiguous_shape;
 mod enums;
-mod logging;
 mod shape_config;
 mod shape_segment;
 mod stroke_batch;
+mod types;
 
-use std::f64::consts::PI;
+#[macro_use]
+mod macros;
+
 use wasm_bindgen::{prelude::*, JsCast};
 use web_sys::{window, CanvasRenderingContext2d, HtmlCanvasElement};
 
-use enums::{stroke_style::StrokeStyle, stroke_width::StrokeWidth};
-use logging::console_log;
-use shape_config::ShapeConfig;
 use stroke_batch::StrokeBatch;
 
 #[wasm_bindgen]
@@ -55,65 +54,18 @@ pub fn main() {
 
   let mut batch = StrokeBatch::from(&context);
 
-  batch
-    .shape_from((0.0, 0.0).into())
-    .config(ShapeConfig {
-      fill: "white".into(),
-      ..Default::default()
-    })
-    .line_through((f64::from(canvas.width()), 0.0).into())
-    .line_through(
-      (f64::from(canvas.width()), f64::from(canvas.height())).into(),
-    )
-    .line_through((0.0, f64::from(canvas.height())).into())
-    .filled();
+  let square_count = 3;
+  let square_count_float = f64::from(square_count);
 
-  let segments_float = f64::from(segments);
-  let angle_offset = (PI * 2.0) / segments_float;
-  let octagon_edge = (((radius * radius) * 2.0)
-    - (2.0 * radius * radius * angle_offset.cos()))
-  .sqrt();
+  batch.circle((500.0, 500.0).into(), 100.0);
 
-  for i in 0..segments {
-    let clamped_color_increment = 360.0 / segments_float;
-    let iteration_float = f64::from(i);
-
-    let next_angle = (angle_offset * iteration_float) + additional_offset;
-
-    batch
-      .shape_from((center_x, center_y).into())
-      .config(ShapeConfig {
-        style: StrokeStyle::Hsl(
-          iteration_float * clamped_color_increment,
-          100.0,
-          50.0,
-        ),
-        width: StrokeWidth::Thin,
-        ..Default::default()
-      })
-      .angle_through(next_angle, radius)
-      .angle_through(
-        next_angle + (PI - ((PI - ((PI * 2.0) / segments_float)) / 2.0)),
-        octagon_edge,
-      )
-      .outlined();
-
-    batch
-      .shape_from((center_x, center_y).into())
-      .config(ShapeConfig {
-        fill: StrokeStyle::Hsl(
-          iteration_float * clamped_color_increment,
-          100.0,
-          50.0,
-        ),
-        ..Default::default()
-      })
-      .angle_through(next_angle, radius)
-      .angle_through(
-        next_angle + (PI - ((PI - ((PI * 2.0) / segments_float)) / 2.0)),
-        octagon_edge,
-      )
-      .filled();
+  for i in 0..square_count {
+    batch.radial_square(
+      (500.0, 500.0).into(),
+      f64::from(i) * (2.0 / square_count_float) * std::f64::consts::PI,
+      200.0,
+    );
   }
+
   batch.draw();
 }
