@@ -50,7 +50,7 @@ impl From<IntersectType> for IntersectResolver {
               * ((1.0 / radius_x_sq) - (1.0 / radius_y_sq))
               * (point.x - center.x)
               * (point.y - center.y))
-            < 1.0
+            <= 1.0
         })
       }
       IntersectType::Polygon(vertices) => {

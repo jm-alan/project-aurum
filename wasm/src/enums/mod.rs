@@ -1,3 +1,4 @@
+pub mod intersect_type;
 pub mod stroke_cap;
 pub mod stroke_kind;
 pub mod stroke_style;
