@@ -9,7 +9,6 @@ use crate::{
   },
   enums::stroke_kind::StrokeKind,
   shape_config::ShapeConfig,
-  shape_segment::ShapeSegment,
 };
 
 pub struct StrokeBatch<'context_life> {
@@ -41,17 +40,77 @@ impl<'context_life> StrokeBatch<'context_life> {
     start_angle: f64,
     end_angle: f64,
   ) -> &mut Self {
-    self.shapes.push(ContiguousShape {
-      segments: vec![ShapeSegment {
-        coordinates: center,
-        stroke_kind: StrokeKind::CircularArc(radius, start_angle, end_angle),
-      }],
-      ..Default::default()
-    });
-    self
+    self.singleton(StrokeKind::CircularArc(
+      center,
+      radius,
+      start_angle,
+      end_angle,
+    ))
   }
 
-  pub fn singleton(&mut self, kind: StrokeKind) -> &mut Self {
+  pub fn elliptical_arc(
+    &mut self,
+    center: CanvasPoint,
+    angle: f64,
+    radius_x: f64,
+    radius_y: f64,
+    start_angle: f64,
+    end_angle: f64,
+  ) -> &mut Self {
+    self.singleton(StrokeKind::Ellipse(
+      center,
+      angle,
+      radius_x,
+      radius_y,
+      start_angle,
+      end_angle,
+    ))
+  }
+
+  pub fn circle(&mut self, center: CanvasPoint, radius: f64) -> &mut Self {
+    self.singleton(StrokeKind::CircularArc(
+      center,
+      radius,
+      0.0,
+      std::f64::consts::PI * 2.0,
+    ))
+  }
+
+  pub fn ellipse(
+    &mut self,
+    center: CanvasPoint,
+    angle: f64,
+    radius_x: f64,
+    radius_y: f64,
+  ) -> &mut Self {
+    self.singleton(StrokeKind::Ellipse(
+      center,
+      angle,
+      radius_x,
+      radius_y,
+      0.0,
+      std::f64::consts::PI * 2.0,
+    ))
+  }
+
+  pub fn square(
+    &mut self,
+    corner_one: CanvasPoint,
+    corner_two: CanvasPoint,
+  ) -> &mut Self {
+    self.singleton(StrokeKind::Square(corner_one, corner_two))
+  }
+
+  pub fn radial_square(
+    &mut self,
+    corner_one: CanvasPoint,
+    angle: f64,
+    radius: f64,
+  ) -> &mut Self {
+    self.singleton(StrokeKind::SquareVector(corner_one, angle, radius))
+  }
+
+  fn singleton(&mut self, kind: StrokeKind) -> &mut Self {
     self.shapes.push(kind.into());
     self
   }
