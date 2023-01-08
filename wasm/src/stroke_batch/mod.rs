@@ -1,8 +1,11 @@
 mod stroke_batch_from_render_context;
 
+use std::collections::HashMap;
+
 use web_sys::CanvasRenderingContext2d;
 
 use crate::{
+  angular_slice::AngularSlice,
   canvas_point::CanvasPoint,
   contiguous_shape::{
     contiguous_shape_builder::ContiguousShapeBuilder, ContiguousShape,
@@ -14,7 +17,7 @@ use crate::{
 pub struct StrokeBatch<'context_life> {
   render_context: &'context_life CanvasRenderingContext2d,
   pub config: ShapeConfig,
-  pub shapes: Vec<ContiguousShape>,
+  pub shapes: HashMap<String, ContiguousShape>,
 }
 
 impl<'context_life> StrokeBatch<'context_life> {
@@ -24,7 +27,7 @@ impl<'context_life> StrokeBatch<'context_life> {
     Self {
       render_context,
       config: Default::default(),
-      shapes: vec![],
+      shapes: Default::default(),
     }
   }
 
@@ -35,83 +38,82 @@ impl<'context_life> StrokeBatch<'context_life> {
 
   pub fn arc(
     &mut self,
+    name: &str,
     center: CanvasPoint,
     radius: f64,
-    start_angle: f64,
-    end_angle: f64,
+    slice: AngularSlice,
   ) -> &mut Self {
-    self.singleton(StrokeKind::CircularArc(
-      center,
-      radius,
-      start_angle,
-      end_angle,
-    ))
+    self.singleton(name, StrokeKind::CircularArc(center, radius, slice))
   }
 
   pub fn elliptical_arc(
     &mut self,
+    name: &str,
     center: CanvasPoint,
     angle: f64,
     radius_x: f64,
     radius_y: f64,
-    start_angle: f64,
-    end_angle: f64,
+    slice: AngularSlice,
   ) -> &mut Self {
-    self.singleton(StrokeKind::Ellipse(
-      center,
-      angle,
-      radius_x,
-      radius_y,
-      start_angle,
-      end_angle,
-    ))
+    self.singleton(
+      name,
+      StrokeKind::Ellipse(center, angle, radius_x, radius_y, slice),
+    )
   }
 
-  pub fn circle(&mut self, center: CanvasPoint, radius: f64) -> &mut Self {
-    self.singleton(StrokeKind::CircularArc(
-      center,
-      radius,
-      0.0,
-      std::f64::consts::PI * 2.0,
-    ))
+  pub fn circle(
+    &mut self,
+    name: &str,
+    center: CanvasPoint,
+    radius: f64,
+  ) -> &mut Self {
+    self.singleton(
+      name,
+      StrokeKind::CircularArc(center, radius, AngularSlice::circle()),
+    )
   }
 
   pub fn ellipse(
     &mut self,
+    name: &str,
     center: CanvasPoint,
     angle: f64,
     radius_x: f64,
     radius_y: f64,
   ) -> &mut Self {
-    self.singleton(StrokeKind::Ellipse(
-      center,
-      angle,
-      radius_x,
-      radius_y,
-      0.0,
-      std::f64::consts::PI * 2.0,
-    ))
+    self.singleton(
+      name,
+      StrokeKind::Ellipse(
+        center,
+        angle,
+        radius_x,
+        radius_y,
+        AngularSlice::circle(),
+      ),
+    )
   }
 
   pub fn square(
     &mut self,
+    name: &str,
     corner_one: CanvasPoint,
     corner_two: CanvasPoint,
   ) -> &mut Self {
-    self.singleton(StrokeKind::Square(corner_one, corner_two))
+    self.singleton(name, StrokeKind::Square(corner_one, corner_two))
   }
 
   pub fn radial_square(
     &mut self,
+    name: &str,
     corner_one: CanvasPoint,
     angle: f64,
     radius: f64,
   ) -> &mut Self {
-    self.singleton(StrokeKind::SquareVector(corner_one, angle, radius))
+    self.singleton(name, StrokeKind::SquareVector(corner_one, angle, radius))
   }
 
-  fn singleton(&mut self, kind: StrokeKind) -> &mut Self {
-    self.shapes.push(kind.into());
+  fn singleton(&mut self, name: &str, kind: StrokeKind) -> &mut Self {
+    self.shapes.insert(name.to_owned(), kind.into());
     self
   }
 
@@ -122,6 +124,6 @@ impl<'context_life> StrokeBatch<'context_life> {
 
 impl StrokeBatch<'_> {
   pub fn draw(&mut self) {
-    self.shapes.drain(..).for_each(|shape| shape.draw(self.render_context));
+    self.shapes.values().for_each(|shape| shape.draw(self.render_context));
   }
 }

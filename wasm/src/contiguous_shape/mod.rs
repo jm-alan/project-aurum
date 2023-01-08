@@ -61,14 +61,14 @@ impl ContiguousShape {
           context.line_to(center_x + y_diff, center_y - x_diff);
           context.close_path();
         }
-        StrokeKind::CircularArc(center, radius, start_angle, end_angle) => {
+        StrokeKind::CircularArc(center, radius, slice) => {
           context.begin_path();
           let Ok(_) = context.arc(
             center.x,
             center.y,
             radius,
-            start_angle,
-            end_angle
+            slice.start,
+            slice.end
           ) else {
             js_panic!("Invalid parameters passed to arc function");
           };
@@ -94,14 +94,7 @@ impl ContiguousShape {
             segment.coordinates.y,
           );
         }
-        StrokeKind::Ellipse(
-          center,
-          radius_x,
-          radius_y,
-          rotation,
-          start_angle,
-          end_angle,
-        ) => {
+        StrokeKind::Ellipse(center, radius_x, radius_y, rotation, slice) => {
           context.begin_path();
           let Ok(_) = context.ellipse(
             center.x,
@@ -109,8 +102,8 @@ impl ContiguousShape {
             radius_x,
             radius_y,
             rotation,
-            start_angle,
-            end_angle,
+            slice.start,
+            slice.end,
           ) else {
             js_panic!("Invalid parameters passed to ellipse function");
           };
