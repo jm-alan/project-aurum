@@ -35,4 +35,18 @@ impl AngularSlice {
       end: std::f64::consts::PI * 2.0,
     }
   }
+
+  pub fn semicircle() -> Self {
+    Self {
+      start: 0.0,
+      end: std::f64::consts::PI,
+    }
+  }
+
+  pub fn semicircle_from(start: f64) -> Self {
+    Self {
+      start,
+      end: start + std::f64::consts::PI,
+    }
+  }
 }
