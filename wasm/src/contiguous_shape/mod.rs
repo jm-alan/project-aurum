@@ -23,7 +23,7 @@ pub struct ContiguousShape {
 }
 
 impl ContiguousShape {
-  pub fn draw(self, context: &CanvasRenderingContext2d) {
+  pub fn draw(&self, context: &CanvasRenderingContext2d) {
     context.begin_path();
     context.set_stroke_style(&self.config.style.to_string().into());
     context.set_line_width(self.config.width.into());
