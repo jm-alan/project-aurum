@@ -8,6 +8,6 @@ pub struct CanvasPoint {
 
 impl CanvasPoint {
   pub fn distance_to(&self, other: CanvasPoint) -> f64 {
-    ((self.x - other.x).powf(2.0) + (self.y - other.y).powf(2.0)).sqrt()
+    f64::hypot(self.x - other.x, self.y - other.y)
   }
 }
