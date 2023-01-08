@@ -28,4 +28,11 @@ impl AngularSlice {
       end: control.angle_to(point_two),
     }
   }
+
+  pub fn circle() -> Self {
+    Self {
+      start: 0.0,
+      end: std::f64::consts::PI * 2.0,
+    }
+  }
 }
