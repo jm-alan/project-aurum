@@ -7,18 +7,18 @@ pub struct AngularSlice {
 }
 
 impl AngularSlice {
-  fn new(start: f64, end: f64) -> Self {
+  pub fn new(start: f64, end: f64) -> Self {
     Self { start, end }
   }
 
-  fn from_offset(start: f64, offset: f64) -> Self {
+  pub fn from_offset(start: f64, offset: f64) -> Self {
     Self {
       start,
       end: start + offset,
     }
   }
 
-  fn from_points(
+  pub fn from_points(
     point_one: CanvasPoint,
     point_two: CanvasPoint,
     control: CanvasPoint,
