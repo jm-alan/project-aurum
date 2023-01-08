@@ -14,6 +14,7 @@ use crate::{
 
 pub struct ContiguousShapeBuilder<'batch_life: 'builder_life, 'builder_life> {
   pub batch: &'builder_life mut StrokeBatch<'batch_life>,
+  pub name: String,
   pub start: CanvasPoint,
   pub segments: Vec<ShapeSegment>,
   pub closed_shape: bool,

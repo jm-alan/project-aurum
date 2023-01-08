@@ -9,6 +9,7 @@ impl<'batch_life: 'builder_life, 'builder_life>
   fn from(builder: ContiguousShapeBuilder<'batch_life, 'builder_life>) -> Self {
     let ContiguousShapeBuilder {
       batch,
+      name,
       start,
       closed_shape,
       filled_shape,
@@ -24,7 +25,7 @@ impl<'batch_life: 'builder_life, 'builder_life>
       intersect_type,
       config,
     };
-    batch.shapes.push(shape);
+    batch.shapes.insert(name, shape);
     batch
   }
 }
