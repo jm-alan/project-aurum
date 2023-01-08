@@ -2,8 +2,8 @@ use crate::canvas_point::CanvasPoint;
 
 #[derive(Debug, Default, Clone, Copy)]
 pub struct AngularSlice {
-  start: f64,
-  end: f64,
+  pub start: f64,
+  pub end: f64,
 }
 
 impl AngularSlice {
