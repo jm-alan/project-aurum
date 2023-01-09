@@ -14,6 +14,7 @@ use crate::{
   shape_config::ShapeConfig,
 };
 
+#[derive(Debug)]
 pub struct StrokeBatch<'context_life> {
   render_context: &'context_life CanvasRenderingContext2d,
   pub config: ShapeConfig,
