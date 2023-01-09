@@ -1,5 +1,7 @@
 mod intersect_resolver_from_intersect_type;
 
+use std::fmt::{Debug, Formatter, Result};
+
 use crate::{
   canvas_point::CanvasPoint, types::intersect_resolver::IntersectResolver,
 };
@@ -14,4 +16,15 @@ pub enum IntersectType {
   Ellipse(CanvasPoint, f64, f64, f64),
   Polygon(Vec<CanvasPoint>),
   Custom(IntersectResolver),
+}
+
+impl Debug for IntersectType {
+  fn fmt(&self, formatter: &mut Formatter<'_>) -> Result {
+    match self {
+      Self::Custom(_) => {
+        formatter.write_fmt(format_args!("IntersectType::Custom"))
+      }
+      other => formatter.write_fmt(format_args!("{:?}", other)),
+    }
+  }
 }
