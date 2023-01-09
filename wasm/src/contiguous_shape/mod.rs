@@ -12,7 +12,7 @@ use crate::{
   shape_segment::ShapeSegment,
 };
 
-#[derive(Default)]
+#[derive(Debug, Default)]
 pub struct ContiguousShape {
   pub start: CanvasPoint,
   pub closed_shape: bool,
@@ -110,13 +110,13 @@ impl ContiguousShape {
         }
       }
     }
+    if self.closed_shape {
+      context.close_path();
+    };
     if self.filled_shape {
       context.set_fill_style(&self.config.fill.to_string().into());
       context.fill();
-    } else if self.closed_shape {
-      context.close_path();
-    } else {
-      context.stroke();
     }
+    context.stroke();
   }
 }
