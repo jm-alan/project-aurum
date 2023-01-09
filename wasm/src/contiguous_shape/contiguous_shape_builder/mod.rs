@@ -12,6 +12,7 @@ use crate::{
   stroke_batch::StrokeBatch,
 };
 
+#[derive(Debug)]
 pub struct ContiguousShapeBuilder<'batch_life: 'builder_life, 'builder_life> {
   pub batch: &'builder_life mut StrokeBatch<'batch_life>,
   pub name: String,
