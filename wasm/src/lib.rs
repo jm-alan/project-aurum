@@ -1,3 +1,4 @@
+mod angular_slice;
 mod canvas_point;
 mod contiguous_shape;
 mod enums;
@@ -9,6 +10,8 @@ mod types;
 #[macro_use]
 mod macros;
 
+use rand::random;
+use shape_config::ShapeConfig;
 use wasm_bindgen::{prelude::*, JsCast};
 use web_sys::{window, CanvasRenderingContext2d, HtmlCanvasElement};
 
@@ -26,8 +29,8 @@ extern "C" {
   fn err(s: &str);
 }
 
-#[wasm_bindgen(start)]
-pub fn main() {
+#[wasm_bindgen]
+pub fn draw(center_x: f64, center_y: f64, square_count: u32, square_size: f64) {
   let Some(window_ref) = window() else {
     js_panic!("Failed to grab window object from DOM");
   };
@@ -54,16 +57,33 @@ pub fn main() {
 
   let mut batch = StrokeBatch::from(&context);
 
-  let square_count = 3;
   let square_count_float = f64::from(square_count);
 
-  batch.circle((500.0, 500.0).into(), 100.0);
+  // batch
+  // .custom_shape()
+  // .config(ShapeConfig {
+  //   fill: "white".into(),
+  //   ..Default::default()
+  // })
+  // .line_through((0.0, 0.0).into())
+  // .line_through((f64::from(canvas.width()), 0.0).into())
+  // .line_through(
+  //   (f64::from(canvas.width()), f64::from(canvas.height())).into(),
+  // )
+  // .line_through((0.0, f64::from(canvas.height())).into())
+  // .filled();
+
+  batch.config(ShapeConfig {
+    style: "white".into(),
+    ..Default::default()
+  });
 
   for i in 0..square_count {
     batch.radial_square(
-      (500.0, 500.0).into(),
+      &format!("{}", random::<u64>()),
+      (center_x, center_y).into(),
       f64::from(i) * (2.0 / square_count_float) * std::f64::consts::PI,
-      200.0,
+      square_size,
     );
   }
 
