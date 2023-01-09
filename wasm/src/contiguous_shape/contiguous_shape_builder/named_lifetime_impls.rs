@@ -22,12 +22,12 @@ impl<'batch_life: 'builder_life, 'builder_life>
   }
 
   pub fn outlined(mut self) -> &'builder_life mut StrokeBatch<'batch_life> {
-    self.filled_shape = false;
     self.closed_shape = true;
     self.into()
   }
 
   pub fn filled(mut self) -> &'builder_life mut StrokeBatch<'batch_life> {
+    self.closed_shape = true;
     self.filled_shape = true;
     self.into()
   }
